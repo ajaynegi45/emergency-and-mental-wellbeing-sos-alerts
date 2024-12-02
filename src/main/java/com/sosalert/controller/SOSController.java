@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sos")
+@CrossOrigin("*")
 public class SOSController {
 
     private final UserContactRepository contactRepository;
     private final EmailService emailService;
-
     public SOSController(UserContactRepository contactRepository, EmailService emailService) {
         this.contactRepository = contactRepository;
         this.emailService = emailService;

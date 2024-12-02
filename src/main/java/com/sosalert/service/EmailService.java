@@ -5,14 +5,12 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class EmailService {
 
     private final JavaMailSender mailSender;
-
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }

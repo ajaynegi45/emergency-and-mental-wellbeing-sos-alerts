@@ -3,6 +3,7 @@ package com.sosalert.service;
 import com.sosalert.exception.InvalidContactException;
 import com.sosalert.exception.UserNotFoundException;
 import com.sosalert.model.ContactDTO;
+import com.sosalert.model.ContactDetailsDTO;
 import com.sosalert.model.UserContact;
 import com.sosalert.repository.UserContactRepository;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,20 @@ public class ContactService {
 
         // Save or update the user contact in the database
         contactRepository.save(userContact);
+    }
+
+
+
+    // Fetch all contact details for a user
+    public ContactDetailsDTO getContactDetails(String userId) {
+        UserContact userContact = contactRepository.findByUserId(userId)
+                .orElseThrow(() -> new InvalidContactException("User not found with ID: " + userId));
+
+        // Return a DTO that contains the emails and phone numbers
+        ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO();
+        contactDetailsDTO.setUserId(userContact.getUserId());
+        contactDetailsDTO.setEmailAddresses(userContact.getEmailAddresses());
+        contactDetailsDTO.setPhoneNumbers(userContact.getPhoneNumbers());
+        return contactDetailsDTO;
     }
 }
