@@ -11,10 +11,12 @@ spring:
     #password: # --- Generate application password for that email id from google console ---
 
     username: codiescoder@gmail.com
-    password: nhxvxwgsthvypwjq
+    password: jhdbfvjhdfsbvjhs
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+server:
+  port: 8081

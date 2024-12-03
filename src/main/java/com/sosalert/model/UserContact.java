@@ -1,6 +1,5 @@
 package com.sosalert.model;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,20 +14,17 @@ public class UserContact {
     @NotEmpty
     private String userId;
 
-    private List<String> phoneNumbers;
+    private List<Contact> contacts;
 
-    @Email
-    private List<String> emailAddresses;
 
 
     public UserContact() {
     }
 
-    public UserContact(String contactId, String userId, List<String> phoneNumbers, List<String> emailAddresses) {
+    public UserContact(String contactId, String userId, List<Contact> contacts) {
         this.contactId = contactId;
         this.userId = userId;
-        this.phoneNumbers = phoneNumbers;
-        this.emailAddresses = emailAddresses;
+        this.contacts = contacts;
     }
 
     public String getContactId() {
@@ -47,20 +43,11 @@ public class UserContact {
         this.userId = userId;
     }
 
-    public List<String> getPhoneNumbers() {
-        return phoneNumbers;
+    public List<Contact> getContacts() {
+        return contacts;
     }
 
-    public void setPhoneNumbers(List<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
-    }
-
-    public List<String> getEmailAddresses() {
-        return emailAddresses;
-    }
-
-    public void setEmailAddresses(List<String> emailAddresses) {
-        this.emailAddresses = emailAddresses;
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 }
-

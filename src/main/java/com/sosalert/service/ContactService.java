@@ -1,13 +1,12 @@
 package com.sosalert.service;
 
 import com.sosalert.exception.InvalidContactException;
-import com.sosalert.exception.UserNotFoundException;
+import com.sosalert.model.Contact;
 import com.sosalert.model.ContactDTO;
 import com.sosalert.model.ContactDetailsDTO;
 import com.sosalert.model.UserContact;
 import com.sosalert.repository.UserContactRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 
 @Service
@@ -20,54 +19,44 @@ public class ContactService {
     }
 
     public void saveContact(ContactDTO contactDTO) {
-        // Find the user by userId or create a new UserContact if none exists
-        UserContact userContact = contactRepository.findByUserId(contactDTO.getUserId())
-                .orElseGet(() -> {
-                    UserContact newUserContact = new UserContact();
-                    newUserContact.setUserId(contactDTO.getUserId());
-                    newUserContact.setEmailAddresses(new ArrayList<>()); // Initialize email list
-                    newUserContact.setPhoneNumbers(new ArrayList<>());   // Initialize phone list
-                    return newUserContact;
-                });
+        try {
+            UserContact userContact = contactRepository.findByUserId(contactDTO.getUserId())
+                    .orElseGet(() -> {
+                        UserContact newUserContact = new UserContact();
+                        newUserContact.setUserId(contactDTO.getUserId());
+                        newUserContact.setContacts(new ArrayList<>());
+                        return newUserContact;
+                    });
 
-        // Validate input: At least one contact detail (email or phone) must be provided
-        if ((contactDTO.getEmail() == null || contactDTO.getEmail().isBlank())
-                && (contactDTO.getPhoneNumber() == null || contactDTO.getPhoneNumber().isBlank())) {
-            throw new InvalidContactException("At least one contact detail (email or phone number) is required.");
-        }
-
-        // Add email if provided and not already present
-        if (contactDTO.getEmail() != null && !contactDTO.getEmail().isBlank()) {
-            if (userContact.getEmailAddresses().contains(contactDTO.getEmail())) {
-                throw new InvalidContactException("Email already exists.");
+            if (contactDTO.getContact() == null) {
+                throw new InvalidContactException("Contact details cannot be null.");
             }
-            userContact.getEmailAddresses().add(contactDTO.getEmail());
-        }
 
-        // Add phone number if provided and not already present
-        if (contactDTO.getPhoneNumber() != null && !contactDTO.getPhoneNumber().isBlank()) {
-            if (userContact.getPhoneNumbers().contains(contactDTO.getPhoneNumber())) {
-                throw new InvalidContactException("Phone number already exists.");
+            Contact newContact = contactDTO.getContact();
+            if (newContact.getEmail() == null && newContact.getPhoneNumber() == null) {
+                throw new InvalidContactException("At least one contact detail (email or phone number) is required.");
             }
-            userContact.getPhoneNumbers().add(contactDTO.getPhoneNumber());
-        }
 
-        // Save or update the user contact in the database
-        contactRepository.save(userContact);
+            if (userContact.getContacts().stream()
+                    .anyMatch(c -> c.getEmail().equals(newContact.getEmail()) ||
+                            c.getPhoneNumber().equals(newContact.getPhoneNumber()))) {
+                throw new InvalidContactException("Contact already exists.");
+            }
+
+            userContact.getContacts().add(newContact);
+            contactRepository.save(userContact);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save contact: " + e.getMessage());
+        }
     }
 
-
-
-    // Fetch all contact details for a user
     public ContactDetailsDTO getContactDetails(String userId) {
         UserContact userContact = contactRepository.findByUserId(userId)
                 .orElseThrow(() -> new InvalidContactException("User not found with ID: " + userId));
 
-        // Return a DTO that contains the emails and phone numbers
         ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO();
         contactDetailsDTO.setUserId(userContact.getUserId());
-        contactDetailsDTO.setEmailAddresses(userContact.getEmailAddresses());
-        contactDetailsDTO.setPhoneNumbers(userContact.getPhoneNumbers());
+        contactDetailsDTO.setContacts(userContact.getContacts());
         return contactDetailsDTO;
     }
 }

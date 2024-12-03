@@ -3,37 +3,30 @@ package com.sosalert.model;
 import java.util.List;
 
 public class ContactDetailsDTO {
-
     private String userId;
-    private List<String> emailAddresses;
-    private List<String> phoneNumbers;
+    private List<Contact> contacts;
 
     public ContactDetailsDTO() {
     }
 
-    public ContactDetailsDTO(String userId, List<String> emailAddresses, List<String> phoneNumbers) {
+    public ContactDetailsDTO(String userId, List<Contact> contacts) {
         this.userId = userId;
-        this.emailAddresses = emailAddresses;
-        this.phoneNumbers = phoneNumbers;
+        this.contacts = contacts;
     }
 
     public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    public List<String> getEmailAddresses() {
-        return emailAddresses;
+
+    public List<Contact> getContacts() {
+        return contacts;
     }
-    public void setEmailAddresses(List<String> emailAddresses) {
-        this.emailAddresses = emailAddresses;
-    }
-    public List<String> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-    public void setPhoneNumbers(List<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 }
-
