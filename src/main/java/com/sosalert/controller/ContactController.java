@@ -51,5 +51,26 @@ public class ContactController {
                     .body("Failed to fetch contacts: " + e.getMessage());
         }
     }
+
+
+    @DeleteMapping("/delete-contact/{userId}")
+    public ResponseEntity<String> deleteContact(
+            @PathVariable String userId,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber) {
+        if (userId == null || userId.isBlank()) {
+            throw new InvalidContactException("User ID is required to delete contact.");
+        }
+        if ((email == null || email.isBlank()) && (phoneNumber == null || phoneNumber.isBlank())) {
+            throw new InvalidContactException("Either email or phone number must be provided for deletion.");
+        }
+
+        boolean isDeleted = contactService.deleteContact(userId, email, phoneNumber);
+        if (isDeleted) {
+            return ResponseEntity.ok("Contact deleted successfully!");
+        } else {
+            return ResponseEntity.status(404).body("Contact not found.");
+        }
+    }
 }
 

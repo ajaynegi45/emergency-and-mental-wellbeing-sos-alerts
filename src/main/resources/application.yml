@@ -11,7 +11,7 @@ spring:
     #password: # --- Generate application password for that email id from google console ---
 
     username: codiescoder@gmail.com
-    password: jhdbfvjhdfsbvjhs
+    password: nhxvxwgsthvypwjq
     properties:
       mail:
         smtp:

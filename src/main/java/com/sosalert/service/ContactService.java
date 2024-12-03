@@ -7,13 +7,14 @@ import com.sosalert.model.ContactDetailsDTO;
 import com.sosalert.model.UserContact;
 import com.sosalert.repository.UserContactRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 @Service
 public class ContactService {
 
     private final UserContactRepository contactRepository;
-
     public ContactService(UserContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
@@ -59,4 +60,37 @@ public class ContactService {
         contactDetailsDTO.setContacts(userContact.getContacts());
         return contactDetailsDTO;
     }
+
+
+
+
+    public boolean deleteContact(String userId, String email, String phoneNumber) {
+        // Fetch the user's contact list or throw an exception if the user is not found
+        UserContact userContact = contactRepository.findByUserId(userId)
+                .orElseThrow(() -> new InvalidContactException("User not found with ID: " + userId));
+
+        boolean isDeleted = false;
+
+        // Remove the contact if either the email or phone number matches
+        if ((email != null && !email.isBlank()) || (phoneNumber != null && !phoneNumber.isBlank())) {
+            Iterator<Contact> iterator = userContact.getContacts().iterator();
+            while (iterator.hasNext()) {
+                Contact contact = iterator.next();
+                if ((email != null && email.equals(contact.getEmail())) ||
+                        (phoneNumber != null && phoneNumber.equals(contact.getPhoneNumber()))) {
+                    iterator.remove();
+                    isDeleted = true;
+                }
+            }
+        } else {
+            throw new InvalidContactException("Either email or phone number must be provided for deletion.");
+        }
+
+        if (isDeleted) {
+            contactRepository.save(userContact); // Save the updated contact list
+        }
+
+        return isDeleted;
+    }
+
 }

@@ -3,6 +3,8 @@ package com.sosalert.model;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "user_contacts")
@@ -14,8 +16,7 @@ public class UserContact {
     @NotEmpty
     private String userId;
 
-    private List<Contact> contacts;
-
+    private List<Contact> contacts = new ArrayList<>();
 
 
     public UserContact() {

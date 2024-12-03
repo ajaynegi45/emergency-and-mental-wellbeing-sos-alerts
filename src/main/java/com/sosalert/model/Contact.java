@@ -16,7 +16,6 @@ public class Contact {
     private String phoneNumber;
 
 
-
     public Contact() {
     }
 
