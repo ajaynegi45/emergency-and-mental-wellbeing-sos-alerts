@@ -25,8 +25,10 @@ public class SOSController {
     @PostMapping("/alert")
     public ResponseEntity<String> sendSOSAlert(
             @RequestParam String userId,
+            @RequestParam String username,
             @RequestParam double latitude,
-            @RequestParam double longitude) {
+            @RequestParam double longitude
+    ) {
         try {
             Optional<UserContact> userContact = contactRepository.findByUserId(userId);
 
@@ -34,7 +36,7 @@ public class SOSController {
                 UserContact contact = userContact.get();
                 String googleMapsLink = String.format("https://www.google.com/maps?q=%s,%s", latitude, longitude);
 
-                emailService.sendAlertEmails(contact.getContacts(), googleMapsLink);
+                emailService.sendAlertEmails(contact.getContacts(), googleMapsLink, username);
                 return ResponseEntity.ok("SOS alerts sent successfully!");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");

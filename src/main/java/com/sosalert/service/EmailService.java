@@ -13,12 +13,11 @@ import java.util.List;
 public class EmailService {
 
     private final JavaMailSender mailSender;
-
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-    public void sendAlertEmails(List<Contact> contacts, String googleMapsLink) {
+    public void sendAlertEmails(List<Contact> contacts, String googleMapsLink, String username) {
         for (Contact contact : contacts) {
             try {
                 if (contact.getEmail() != null) {
@@ -26,10 +25,22 @@ public class EmailService {
                     MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
                     helper.setTo(contact.getEmail());
-                    helper.setSubject("Emergency Alert!");
-                    helper.setText(String.format(
-                            "Emergency reported at location: <a href='%s'>View on Google Maps</a>",
-                            googleMapsLink), true);
+                    helper.setSubject("🚨 URGENT: Emergency Alert! 🚨");
+                    helper.setText(
+                            String.format(
+                                    "<html>" +
+                                            "<body>" +
+                                            "<h2 style='color: red;'>Emergency Alert!</h2>" +
+                                            "<p><strong>%s</strong> has reported an emergency and may need immediate assistance.</p>" +
+                                            "<p><b>Location:</b> <a href='%s'>Click here to view on Google Maps</a></p>" +
+                                            "<p>Please act promptly to ensure their safety.</p>" +
+                                            "<p style='color: gray;'>This alert was automatically generated. For more details, please contact the individual directly.</p>" +
+                                            "</body>" +
+                                            "</html>",
+                                    username, googleMapsLink
+                            ),
+                            true
+                    );
 
                     mailSender.send(message);
                 }
@@ -38,6 +49,12 @@ public class EmailService {
             }
         }
     }
+
 }
+
+
+
+
+
 
 
