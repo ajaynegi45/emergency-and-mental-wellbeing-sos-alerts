@@ -15,6 +15,14 @@ public class Contact {
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits.")
     private String phoneNumber;
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 
     public Contact() {
     }

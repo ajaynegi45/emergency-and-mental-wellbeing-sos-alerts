@@ -40,11 +40,11 @@ public class ContactService {
             }
 
             // Check for existing contacts (null-safe)
-            if (userContact.getContacts().stream()
-                    .anyMatch(c -> Objects.equals(c.getEmail(), newContact.getEmail()) ||
-                            Objects.equals(c.getPhoneNumber(), newContact.getPhoneNumber()))) {
-                throw new InvalidContactException("Contact already exists.");
-            }
+//            if (userContact.getContacts().stream()
+//                    .anyMatch(c -> Objects.equals(c.getEmail(), newContact.getEmail()) ||
+//                            Objects.equals(c.getPhoneNumber(), newContact.getPhoneNumber()))) {
+//                throw new InvalidContactException("Contact already exists.");
+//            }
 
             userContact.getContacts().add(newContact);
             contactRepository.save(userContact);
