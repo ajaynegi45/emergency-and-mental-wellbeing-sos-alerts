@@ -5,6 +5,13 @@ public class ContactDTO {
     private String userId;
     private Contact contact;
 
+    @Override
+    public String toString() {
+        return "ContactDTO{" +
+                "userId='" + userId + '\'' +
+                ", contact=" + contact +
+                '}';
+    }
 
     public ContactDTO() {
     }

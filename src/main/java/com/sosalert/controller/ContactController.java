@@ -23,6 +23,7 @@ public class ContactController {
     @PostMapping("/add-contacts")
     public ResponseEntity<String> addContacts(@RequestBody @Validated ContactDTO contactDTO) {
         try {
+            System.out.println(contactDTO.toString());
             if (contactDTO.getUserId() == null || contactDTO.getUserId().isBlank()) {
                 throw new InvalidContactException("User ID is required to add contact.");
             }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 @Service
 public class ContactService {
@@ -38,9 +39,10 @@ public class ContactService {
                 throw new InvalidContactException("At least one contact detail (email or phone number) is required.");
             }
 
+            // Check for existing contacts (null-safe)
             if (userContact.getContacts().stream()
-                    .anyMatch(c -> c.getEmail().equals(newContact.getEmail()) ||
-                            c.getPhoneNumber().equals(newContact.getPhoneNumber()))) {
+                    .anyMatch(c -> Objects.equals(c.getEmail(), newContact.getEmail()) ||
+                            Objects.equals(c.getPhoneNumber(), newContact.getPhoneNumber()))) {
                 throw new InvalidContactException("Contact already exists.");
             }
 
@@ -50,6 +52,7 @@ public class ContactService {
             throw new RuntimeException("Failed to save contact: " + e.getMessage());
         }
     }
+
 
     public ContactDetailsDTO getContactDetails(String userId) {
         UserContact userContact = contactRepository.findByUserId(userId)
