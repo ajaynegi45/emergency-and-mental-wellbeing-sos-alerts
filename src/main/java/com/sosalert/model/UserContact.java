@@ -13,7 +13,7 @@ public class UserContact {
     @Id
     private String contactId;
 
-    @NotEmpty
+    @NotEmpty(message = "UserId is nor present")
     private String userId;
 
     private List<Contact> contacts = new ArrayList<>();
